@@ -310,7 +310,7 @@ create_cylinder (float bottom_radius, float top_radius, float height, Vertex out
 
 }
 static void
-create_grid16 (float width, float depth, int m, int n, Vertex out_vtx [], int out_idx []) {
+create_grid (float width, float depth, int m, int n, Vertex out_vtx [], int out_idx []) {
 
     // -- Create the vertices.
 
@@ -343,54 +343,6 @@ create_grid16 (float width, float depth, int m, int n, Vertex out_vtx [], int ou
     // Iterate over each quad and compute indices.
     int k = 0;
     int nn = (int)n; // cast to avoid compiler warnings
-    for (int i = 0; i < m - 1; ++i) {
-        for (int j = 0; j < n - 1; ++j) {
-            out_idx[k] = i * nn + j;
-            out_idx[k + 1] = i * nn + j + 1;
-            out_idx[k + 2] = (i + 1) * nn + j;
-
-            out_idx[k + 3] = (i + 1) * nn + j;
-            out_idx[k + 4] = i * nn + j + 1;
-            out_idx[k + 5] = (i + 1) * nn + j + 1;
-
-            k += 6; // next quad
-        }
-    }
-}
-static void
-create_grid32 (float width, float depth, int m, int n, Vertex out_vtx [], uint32_t out_idx []) {
-
-    // -- Create the vertices.
-
-    float half_width = 0.5f * width;
-    float half_depth = 0.5f * depth;
-
-    float dx = width / (n - 1);
-    float dz = depth / (m - 1);
-
-    float du = 1.0f / (n - 1);
-    float dv = 1.0f / (m - 1);
-
-    for (int i = 0; i < m; ++i) {
-        float z = half_depth - i * dz;
-        for (int j = 0; j < n; ++j) {
-            float x = -half_width + j * dx;
-
-            out_vtx[i * n + j].position = XMFLOAT3(x, 0.0f, z);
-            out_vtx[i * n + j].normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-            out_vtx[i * n + j].tangent_u = XMFLOAT3(1.0f, 0.0f, 0.0f);
-
-            // Stretch texture over grid.
-            out_vtx[i * n + j].texc.x = j * du;
-            out_vtx[i * n + j].texc.y = i * dv;
-        }
-    }
-
-    // -- Create the indices.
-
-    // Iterate over each quad and compute indices.
-    int k = 0;
-    int nn = n;
     for (int i = 0; i < m - 1; ++i) {
         for (int j = 0; j < n - 1; ++j) {
             out_idx[k] = i * nn + j;
